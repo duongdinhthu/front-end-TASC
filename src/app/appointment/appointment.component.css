@@ -35,5 +35,30 @@ button {
 }
 
 button:hover {
-  filter: brightness(85%);
+  filter: brightness(30%);
 }
+
+.slot-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+
+.slot-options div {
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.slot-options div.selected {
+  background-color: #4caf50; /* Màu xanh khi chọn */
+  color: white;
+}
+
+.slot-options div:hover {
+  background-color: #e0e0e0;
+}
+

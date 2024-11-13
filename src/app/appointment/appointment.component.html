@@ -1,126 +1,219 @@
+<div class="back-to-top"></div>
 
-  <!-- Back to top button -->
-  <div class="back-to-top"></div>
-
-  <header>
-    <div class="topbar">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-8 text-sm">
-            <div class="site-info">
-              <a href="#"><span class="mai-call text-primary"></span> +00 123 4455 6666</a>
-              <span class="divider">|</span>
-              <a href="#"><span class="mai-mail text-primary"></span> mailexample.com</a>
-            </div>
+<header>
+  <div class="topbar">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 text-sm">
+          <div class="site-info">
+            <a href="#"
+              ><span class="mai-call text-primary"></span> +00 123 4455 6666</a
+            >
+            <span class="divider">|</span>
+            <a href="#"
+              ><span class="mai-mail text-primary"></span> mailexample.com</a
+            >
           </div>
-          <div class="col-sm-4 text-right text-sm">
-            <div class="social-mini-button">
-              <a href="#"><span class="mai-logo-facebook-f"></span></a>
-              <a href="#"><span class="mai-logo-twitter"></span></a>
-              <a href="#"><span class="mai-logo-dribbble"></span></a>
-              <a href="#"><span class="mai-logo-instagram"></span></a>
-            </div>
+        </div>
+        <div class="col-sm-4 text-right text-sm">
+          <div class="social-mini-button">
+            <a href="#"><span class="mai-logo-facebook-f"></span></a>
+            <a href="#"><span class="mai-logo-twitter"></span></a>
+            <a href="#"><span class="mai-logo-dribbble"></span></a>
+            <a href="#"><span class="mai-logo-instagram"></span></a>
           </div>
-        </div> <!-- .row -->
-      </div> <!-- .container -->
-    </div> <!-- .topbar -->
+        </div>
+      </div>
+      <!-- .row -->
+    </div>
+    <!-- .container -->
+  </div>
+  <!-- .topbar -->
 
-    <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
-      <div class="container">
-        <a class="navbar-brand" href="#"><span class="text-primary">One</span>-Health</a>
+  <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
+    <div class="container">
+      <a class="navbar-brand" href="#"
+        ><span class="text-primary">One</span>-Health</a
+      >
 
-        <form action="#">
-          <div class="input-group input-navbar">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="icon-addon1"><span class="mai-search"></span></span>
-            </div>
-            <input type="text" class="form-control" placeholder="Enter keyword.." aria-label="Username" aria-describedby="icon-addon1">
+      <form action="#">
+        <div class="input-group input-navbar">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="icon-addon1"
+              ><span class="mai-search"></span
+            ></span>
           </div>
-        </form>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter keyword.."
+            aria-label="Username"
+            aria-describedby="icon-addon1"
+          />
+        </div>
+      </form>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupport" aria-controls="navbarSupport" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupport"
+        aria-controls="navbarSupport"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupport">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
-              <a class="nav-link" routerLink="/">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/about">About Us</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/doctors">Doctors</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/blog">News</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/contact">Contact</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/appointment">Booking</a>
-            </li>
-            <li class="nav-item">
-              <a class="btn btn-primary ml-lg-3" routerLink="/login">Login / Register</a>
-            </li>
-
-          </ul>
-        </div> <!-- .navbar-collapse -->
-      </div> <!-- .container -->
-    </nav>
-  </header>
+      <div class="collapse navbar-collapse" id="navbarSupport">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" routerLink="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/about">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/doctors">Doctors</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/blog">News</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/contact">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/appointment">Booking</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-primary ml-lg-3" routerLink="/login"
+              >Login / Register</a
+            >
+          </li>
+        </ul>
+      </div>
+      <!-- .navbar-collapse -->
+    </div>
+    <!-- .container -->
+  </nav>
+</header>
 
 <div class="form-basin">
   <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
-
     <!-- Step 1: Select Appointment Details -->
     <div *ngIf="currentStep === 1">
       <fieldset>
         <legend>Step 1: Select Appointment Details</legend>
 
+        <!-- Department Selection -->
         <label for="department">Department:</label>
-        <select id="department" formControlName="department">
+        <select
+          id="department"
+          formControlName="departmentId"
+          (change)="onDepartmentChange($event)"
+        >
           <option value="" disabled>Select Department</option>
-          <!-- Lặp qua danh sách khoa bệnh lấy từ API -->
-          <option *ngFor="let department of departments" [value]="department.id">
-            {{ department.departmentName }} <!-- Hiển thị tên khoa -->
+          <!-- Loop through departments and display options -->
+          <option
+            *ngFor="let department of departments"
+            [value]="department.id"
+          >
+            {{ department.departmentName }}
           </option>
         </select>
-        <div *ngIf="appointmentForm.get('department')?.invalid && appointmentForm.get('department')?.touched" class="error">
+        <div
+          *ngIf="
+            appointmentForm.get('departmentId')?.invalid &&
+            appointmentForm.get('departmentId')?.touched
+          "
+          class="error"
+        >
           Department is required.
         </div>
 
+        <!-- Doctor Selection (Dynamically populated based on department) -->
         <label for="doctor">Doctor:</label>
-        <select id="doctor" formControlName="doctor">
+        <select
+          id="doctor"
+          formControlName="doctorId"
+          (change)="onDoctorChange($event)"
+        >
           <option value="" disabled>Select Doctor</option>
-          <option value="drSmith">Dr. Smith</option>
-          <option value="drJohnson">Dr. Johnson</option>
+          <!-- Loop through doctors and display options -->
+          <option *ngFor="let doctor of doctors" [value]="doctor.id">
+            {{ doctor.doctorName }}
+          </option>
         </select>
-        <div *ngIf="appointmentForm.get('doctor')?.invalid && appointmentForm.get('doctor')?.touched" class="error">
+        <div
+          *ngIf="
+            appointmentForm.get('doctorId')?.invalid &&
+            appointmentForm.get('doctorId')?.touched
+          "
+          class="error"
+        >
           Doctor is required.
         </div>
 
-        <label for="date">Date:</label>
-        <input type="date" id="date" formControlName="date">
-        <div *ngIf="appointmentForm.get('date')?.invalid && appointmentForm.get('date')?.touched" class="error">
-          Date is required.
+        <!-- Medical Day Selection -->
+        <label for="medicalDay">Medical Day:</label>
+        <input
+          type="date"
+          id="medicalDay"
+          formControlName="medicalDay"
+          (change)="onMedicalDayChange($event)"
+        />
+        <div
+          *ngIf="
+            appointmentForm.get('medicalDay')?.invalid &&
+            appointmentForm.get('medicalDay')?.touched
+          "
+          class="error"
+        >
+          Medical Day is required.
         </div>
 
-        <label for="time">Time:</label>
-        <input type="time" id="time" formControlName="time">
-        <div *ngIf="appointmentForm.get('time')?.invalid && appointmentForm.get('time')?.touched" class="error">
-          Time is required.
+
+        <label *ngIf="appointmentForm.get('medicalDay')?.value" for="slot">Slot:</label>
+        <div class="slot-options" *ngIf="appointmentForm.get('medicalDay')?.value && appointmentForm.get('doctorId')?.value">
+          <div
+            *ngFor="let slot of slotOptions"
+            (click)="onSlotChange(slot.value)"
+            [ngClass]="{
+              selected: selectedSlot === slot.value,
+              disabled: lockedSlots.includes(slot.value)
+            }"
+            [style.pointer-events]="lockedSlots.includes(slot.value) ? 'none' : 'auto'"
+            >
+            {{ slot.label }}
+          </div>
         </div>
+
+        <div
+          *ngIf="
+            appointmentForm.get('slot')?.invalid &&
+            appointmentForm.get('slot')?.touched
+          "
+          class="error"
+        >
+          Slot is required.
+        </div>
+
       </fieldset>
 
       <!-- Next Button -->
-      <button type="button" (click)="goToStep(2)" [disabled]="appointmentForm.get('department')?.invalid || appointmentForm.get('doctor')?.invalid || appointmentForm.get('date')?.invalid || appointmentForm.get('time')?.invalid">
+      <button
+        type="button"
+        (click)="goToStep(2)"
+        [disabled]="
+          appointmentForm.get('departmentId')?.invalid ||
+          appointmentForm.get('doctorId')?.invalid ||
+          appointmentForm.get('medicalDay')?.invalid ||
+          appointmentForm.get('slot')?.invalid
+        "
+      >
         Next
       </button>
     </div>
-
 
     <!-- Step 2: Enter Personal Information -->
     <div *ngIf="currentStep === 2">
@@ -128,29 +221,68 @@
         <legend>Step 2: Enter Personal Information</legend>
 
         <label for="name">Name:</label>
-        <input type="text" id="name" formControlName="name" placeholder="Your Full Name">
-        <div *ngIf="appointmentForm.get('name')?.invalid && appointmentForm.get('name')?.touched" class="error">
+        <input
+          type="text"
+          id="name"
+          formControlName="patientName"
+          placeholder="Your Full Name"
+        />
+        <div
+          *ngIf="
+            appointmentForm.get('name')?.invalid &&
+            appointmentForm.get('name')?.touched
+          "
+          class="error"
+        >
           Name must be at least 3 characters long.
         </div>
 
         <label for="email">Email:</label>
-        <input type="email" id="email" formControlName="email" placeholder="Your Email">
-        <div *ngIf="appointmentForm.get('email')?.invalid && appointmentForm.get('email')?.touched" class="error">
+        <input
+          type="email"
+          id="email"
+          formControlName="patientEmail"
+          placeholder="Your Email"
+        />
+        <div
+          *ngIf="
+            appointmentForm.get('email')?.invalid &&
+            appointmentForm.get('email')?.touched
+          "
+          class="error"
+        >
           Please enter a valid email.
         </div>
 
         <label for="phone">Phone Number:</label>
-        <input type="tel" id="phone" formControlName="phone" placeholder="Your Phone Number">
-        <div *ngIf="appointmentForm.get('phone')?.invalid && appointmentForm.get('phone')?.touched" class="error">
+        <input
+          type="tel"
+          id="phone"
+          formControlName="patientPhone"
+          placeholder="Your Phone Number"
+        />
+        <div
+          *ngIf="
+            appointmentForm.get('phone')?.invalid &&
+            appointmentForm.get('phone')?.touched
+          "
+          class="error"
+        >
           Phone number must be 10 digits.
         </div>
       </fieldset>
 
       <!-- Navigation Buttons -->
-      <button type="button" (click)="goToStep(1)">
-        Back
-      </button>
-      <button type="button" (click)="goToStep(3)" [disabled]="appointmentForm.get('name')?.invalid || appointmentForm.get('email')?.invalid || appointmentForm.get('phone')?.invalid">
+      <button type="button" (click)="goToStep(1)">Back</button>
+      <button
+        type="button"
+        (click)="goToStep(3)"
+        [disabled]="
+          appointmentForm.get('patientName')?.invalid ||
+          appointmentForm.get('patientEmail')?.invalid ||
+          appointmentForm.get('patientPhone')?.invalid
+        "
+      >
         Next
       </button>
     </div>
@@ -163,9 +295,7 @@
       </fieldset>
 
       <!-- Navigation Buttons -->
-      <button type="button" (click)="goToStep(2)">
-        Back
-      </button>
+      <button type="button" (click)="goToStep(2)">Back</button>
       <button type="submit" [disabled]="appointmentForm.invalid">
         Submit Appointment
       </button>
@@ -209,17 +339,29 @@
 
         <h5 class="mt-3">Social Media</h5>
         <div class="footer-sosmed mt-3">
-          <a href="#" target="_blank"><span class="mai-logo-facebook-f"></span></a>
+          <a href="#" target="_blank"
+            ><span class="mai-logo-facebook-f"></span
+          ></a>
           <a href="#" target="_blank"><span class="mai-logo-twitter"></span></a>
-          <a href="#" target="_blank"><span class="mai-logo-google-plus-g"></span></a>
-          <a href="#" target="_blank"><span class="mai-logo-instagram"></span></a>
-          <a href="#" target="_blank"><span class="mai-logo-linkedin"></span></a>
+          <a href="#" target="_blank"
+            ><span class="mai-logo-google-plus-g"></span
+          ></a>
+          <a href="#" target="_blank"
+            ><span class="mai-logo-instagram"></span
+          ></a>
+          <a href="#" target="_blank"
+            ><span class="mai-logo-linkedin"></span
+          ></a>
         </div>
       </div>
     </div>
 
-    <hr>
+    <hr />
 
-    <p id="copyright">Copyright &copy; 2020 <a href="https://macodeid.com/" target="_blank">MACode ID</a>. All right reserved</p>
+    <p id="copyright">
+      Copyright &copy; 2020
+      <a href="https://macodeid.com/" target="_blank">MACode ID</a>. All right
+      reserved
+    </p>
   </div>
 </footer>

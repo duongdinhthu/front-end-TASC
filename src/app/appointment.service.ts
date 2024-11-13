@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
@@ -9,7 +10,9 @@ import { tap } from 'rxjs/operators';
 export class AppointmentService {
 
   private apiUrl = 'http://localhost:8080/api/userservice/departments/getall'; // URL API của bạn
-  private doctorsApiUrl = 'http://localhost:8080/api/userservice/doctors'; // URL của API bác sĩ
+  private doctorsApiUrl = 'http://localhost:8080/api/userservice/doctors/getbydepartment'; // URL của API bác sĩ
+  private checkSlotAppointmentByDoctor = "http://localhost:8080/api/appointments/checkslot";
+  private lockSlot = "http://localhost:8082/api/appointments/lock";
 
   constructor(private http: HttpClient) {}
 
@@ -22,7 +25,15 @@ export class AppointmentService {
       })
     );
   }
-  getDoctorsByDepartment(departmentId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.doctorsApiUrl}?departmentId=${departmentId}`);
+  getDoctorsByDepartment(departmentId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.doctorsApiUrl}/${departmentId}`);
   }
+  getSlotByDoctor(doctorId:number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.checkSlotAppointmentByDoctor}/${doctorId}`)
+  }
+  checkLock(appointmentData: any): Observable<any> {
+    return this.http.post<any>(this.lockSlot, appointmentData);
+  }
+
+
 }
