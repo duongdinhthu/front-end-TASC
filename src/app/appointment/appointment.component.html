@@ -291,12 +291,14 @@
     <div *ngIf="currentStep === 3">
       <fieldset>
         <legend>Step 3: Complete Payment</legend>
-        <button type="button">Pay with PayPal</button>
+        <app-payment [doctorPrice]="appointmentForm.get('paymentAmount')?.value||0"
+        (paymentCompleted)="onPaymentCompleted($event)"></app-payment>
       </fieldset>
 
       <!-- Navigation Buttons -->
+
       <button type="button" (click)="goToStep(2)">Back</button>
-      <button type="submit" [disabled]="appointmentForm.invalid">
+      <button type="button" (click)="checkFormValidity()">
         Submit Appointment
       </button>
     </div>

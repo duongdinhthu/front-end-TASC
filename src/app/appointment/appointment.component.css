@@ -1,64 +1,122 @@
+/* Đặt nền cho form */
 .form-basin {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  padding: 40px 20px;
-  font-size: 16px;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  border-radius: 8px;
   max-width: 600px;
-  margin: auto;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
+/* Các trường hợp dành cho fieldset */
+fieldset {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 5px;
   margin-bottom: 20px;
 }
 
+legend {
+  font-size: 1.25em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Label cho các trường */
 label {
   display: block;
   margin-bottom: 8px;
+  font-weight: bold;
 }
 
-input, select, button {
+/* Các input, select */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+select {
   width: 100%;
-  padding: 12px;
-  margin-bottom: 16px;
+  padding: 10px;
+  margin: 5px 0 20px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
+  border-radius: 5px;
+  font-size: 1em;
 }
 
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="date"]:focus,
+select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* Các thông báo lỗi */
+.error {
+  color: #e74c3c;
+  font-size: 0.875em;
+  margin-top: -15px;
+  margin-bottom: 20px;
+}
+
+/* Các nút */
 button {
+  padding: 10px 20px;
   background-color: #007bff;
   color: white;
   border: none;
+  border-radius: 5px;
+  font-size: 1em;
   cursor: pointer;
+  margin-right: 10px;
 }
 
-button:hover {
-  filter: brightness(30%);
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
 
+/* Các button điều hướng */
+button[type="button"] {
+  background-color: #f39c12;
+}
+
+button[type="submit"] {
+  background-color: #2ecc71;
+}
+
+/* Các ô lựa chọn Slot */
 .slot-options {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-
 .slot-options div {
-  padding: 10px 20px;
+  padding: 10px 15px;
   background-color: #f0f0f0;
-  border: 1px solid #ccc;
+  border-radius: 5px;
   cursor: pointer;
-  border-radius: 4px;
 }
 
-.slot-options div.selected {
-  background-color: #4caf50; /* Màu xanh khi chọn */
+.slot-options .selected {
+  background-color: #007bff;
   color: white;
 }
 
-.slot-options div:hover {
+.slot-options .disabled {
   background-color: #e0e0e0;
+  cursor: not-allowed;
 }
 
+/* Các bước tiến (Progress Steps) */
+.step {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.step button {
+  margin: 0 5px;
+}

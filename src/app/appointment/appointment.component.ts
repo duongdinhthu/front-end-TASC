@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AppointmentService } from '../appointment.service';
 import { RandomCodeService } from '../random-code.service'; // Import RandomCodeService
@@ -15,35 +15,34 @@ export class AppointmentComponent implements OnInit {
   currentStep: number = 1;
   slotOptions: any[] = [];
   allSlots: any[] = []; // Mảng lưu tất cả các slot từ API
-  selectedSlot: any;
-  // Mảng chứa danh sách khoa bệnh
-  departments: any[] = [];
-  // Mảng chứa danh sách bác sĩ
+  selectedSlot: any;// Mảng chứa danh sách khoa bệnh
+  departments: any[] = [];// Mảng chứa danh sách bác sĩ
   doctors: any[] = [];
+  paymentSuccessful: boolean = false; // Kiểm tra trạng thái thanh toán
 
   // Mảng chứa các slot đã được đặt (dạng chuỗi như '08:00 - 09:00')
   bookedSlots: string[] = [];
 
   // Form initialization using FormGroup and FormControl
   appointmentForm = new FormGroup({
-    departmentId: new FormControl('', Validators.required),
-    doctorId: new FormControl('', Validators.required),
-    appointmentDate: new FormControl('', Validators.required),
-    medicalDay: new FormControl('', Validators.required),
-    slot: new FormControl('', Validators.required),
-    patientName: new FormControl('', [
+    departmentId: new FormControl<number | null>(null, Validators.required),
+    doctorId: new FormControl<number | null>(null, Validators.required),
+    medicalDay: new FormControl<string | null>(null, Validators.required),
+    slot: new FormControl<number | null>(null, Validators.required),
+    patientName: new FormControl<string | null>(null, [
       Validators.required,
       Validators.minLength(3),
     ]),
-    patientEmail: new FormControl('', [Validators.required, Validators.email]),
-    patientPhone: new FormControl('', [
+    patientEmail: new FormControl<string | null>(null, [
+      Validators.required,
+      Validators.email,
+    ]),
+    patientPhone: new FormControl<string | null>(null, [
       Validators.required,
       Validators.pattern(/^\d{10}$/),
     ]),
-    paymentAmount: new FormControl('', Validators.required),
-    paymentCurrency: new FormControl('', Validators.required),
-    paymentEncryption: new FormControl(''),
-    status: new FormControl('', Validators.required),
+    paymentAmount: new FormControl<number | null>(null, Validators.required),
+    paymentEncryption: new FormControl<string | null>(null),
   });
 
   // Inject AppointmentService and RandomCodeService
@@ -51,6 +50,20 @@ export class AppointmentComponent implements OnInit {
     private appointmentService: AppointmentService,
     private randomCodeService: RandomCodeService // Tiêm RandomCodeService vào constructor
   ) {}
+  onPaymentCompleted(paymentSuccess: boolean): void {
+    this.paymentSuccessful = paymentSuccess;
+    console.log("Trạng thái thanh toán:", this.paymentSuccessful);
+
+    if (this.currentStep === 3 && this.appointmentForm.valid && this.paymentSuccessful) {
+      console.log("Thanh toán thành công!");
+      // Thực hiện các hành động sau khi thanh toán thành công
+      console.log("gọi hàm submit");
+      this.onSubmit();
+    } else {
+      console.log("Thanh toán thất bại.");
+      // Thực hiện các hành động khi thanh toán thất bại
+    }
+  }
 
   ngOnInit(): void {
     // Lấy mã ngẫu nhiên từ service khi component được khởi tạo
@@ -68,7 +81,8 @@ export class AppointmentComponent implements OnInit {
   }
 
   onDoctorChange(event: any) {
-    const doctorId = event.target.value;
+    const doctorId = +event.target.value; // Chuyển event.target.value thành số (number)
+
     // Lấy doctorId từ lựa chọn
     const selectedDoctor = this.doctors.find(
       (doctor) => doctor.id === doctorId
@@ -76,12 +90,26 @@ export class AppointmentComponent implements OnInit {
 
     // Nếu tìm thấy bác sĩ, cập nhật giá trị price trong form
     if (selectedDoctor) {
-      this.appointmentForm
-        .get('paymentAmount')
-        ?.setValue(selectedDoctor.doctorPrice);
+      // Kiểm tra trường paymentAmount có tồn tại trong form không
+      const paymentAmountControl = this.appointmentForm.get('paymentAmount');
+
+      if (paymentAmountControl) {
+        paymentAmountControl.setValue(Number(selectedDoctor.doctorPrice)); // Đảm bảo giá trị là số
+        console.log("Đã gán giá vào paymentAmount: " + selectedDoctor.doctorPrice);
+        console.log("Giá trị paymentAmount hiện tại: " + paymentAmountControl.value);
+        // In ra giá trị đã gán
+      } else {
+        console.error("Trường paymentAmount không tồn tại trong form.");
+      }
+    } else {
+      console.error("Bác sĩ không tồn tại với ID: " + doctorId);
     }
-    this.getSlots(doctorId); // Gọi API lấy danh sách slot của bác sĩ
+
+    // Gọi API lấy danh sách slot của bác sĩ
+    this.getSlots(doctorId);
   }
+
+
 
   // Gọi API để lấy danh sách slot của bác sĩ
   getSlots(doctorId: number) {
@@ -221,7 +249,7 @@ export class AppointmentComponent implements OnInit {
 
   lockedSlots: string[] = []; // Mảng lưu các slot đã bị khóa
 
-  onSlotChange(slotValue: string) {
+  onSlotChange(slotValue: number) {
     // Cập nhật giá trị vào form control 'slot'
     this.appointmentForm.get('slot')?.setValue(slotValue);
     console.log('Selected Slot:', this.appointmentForm.get('slot')?.value); // In ra giá trị của slot
@@ -247,11 +275,11 @@ export class AppointmentComponent implements OnInit {
           // Kiểm tra phản hồi từ backend và xử lý
           if (response.code === 409) {
             // Slot bị khóa, không cho chọn nữa
-            this.lockedSlots.push(slotValue); // Thêm slot vào danh sách bị khóa
+            this.lockedSlots.push(slotValue.toString()); // Thêm slot vào danh sách bị khóa
             alert('Slot này đã bị khóa, vui lòng chọn slot khác.');
           } else if (response.code === 400) {
             // Nếu lỗi 400: Cố gắng khóa lại slot đã khóa
-            this.lockedSlots.push(slotValue); // Thêm vào danh sách bị khóa
+            this.lockedSlots.push(slotValue.toString()); // Thêm vào danh sách bị khóa
             alert('Slot này đã được khóa trước đó, không thể khóa lại.');
           } else {
             // Nếu không có lỗi, coi như slot đã được khóa thành công
@@ -272,4 +300,24 @@ export class AppointmentComponent implements OnInit {
       );
     }
   }
+  checkFormValidity() {
+    const invalidFields: string[] = [];
+    console.log(this.currentStep.toString() + this.paymentSuccessful.toString());
+    Object.keys(this.appointmentForm.controls).forEach(key => {
+      const control = this.appointmentForm.get(key);
+      if (control && control.invalid) {
+        invalidFields.push(key);
+      }
+    });
+
+    if (invalidFields.length > 0) {
+      console.log('Các trường chưa hợp lệ hoặc chưa có giá trị:', invalidFields);
+      invalidFields.forEach(field => {
+        console.log(`Trường "${field}" lỗi:`, this.appointmentForm.get(field)?.errors);
+      });
+    } else {
+      console.log('Tất cả các trường đều hợp lệ!');
+    }
+  }
+
 }

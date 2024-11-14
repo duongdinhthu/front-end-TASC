@@ -11,7 +11,9 @@ import { ContactComponent } from './contact/contact.component';
 import { DoctorsComponent } from './doctors/doctors.component';
 import { LoginComponent } from './login/login.component';
 import { AppointmentComponent } from './appointment/appointment.component';
-import { HttpClientModule } from '@angular/common/http';  // Import HttpClientModule
+import { HttpClientModule } from '@angular/common/http';
+import { PaymentComponent } from './payment/payment.component';
+import { PayPalService } from './paypal.service';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,7 @@ import { HttpClientModule } from '@angular/common/http';  // Import HttpClientMo
     DoctorsComponent,
     LoginComponent,
     AppointmentComponent,
+    PaymentComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,7 +35,7 @@ import { HttpClientModule } from '@angular/common/http';  // Import HttpClientMo
     FormsModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [PayPalService],
   bootstrap: [AppComponent],
   exports: [AppointmentComponent],
 })
