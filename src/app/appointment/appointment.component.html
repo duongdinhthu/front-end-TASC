@@ -1,0 +1,219 @@
+<div class="back-to-top"></div>
+
+
+
+<div class="form-basin">
+  <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+    <!-- Step 1: Select Appointment Details -->
+    <div *ngIf="currentStep === 1">
+      <fieldset>
+        <legend>Step 1: Select Appointment Details</legend>
+
+        <!-- Department Selection -->
+        <label for="department">Department:</label>
+        <select
+          id="department"
+          formControlName="departmentId"
+          (change)="onDepartmentChange($event)"
+        >
+          <option value="" disabled>Select Department</option>
+          <!-- Loop through departments and display options -->
+          <option
+            *ngFor="let department of departments"
+            [value]="department.id"
+          >
+            {{ department.departmentName }}
+          </option>
+        </select>
+        <div
+          *ngIf="
+            appointmentForm.get('departmentId')?.invalid &&
+            appointmentForm.get('departmentId')?.touched
+          "
+          class="error"
+        >
+          Department is required.
+        </div>
+
+        <!-- Doctor Selection (Dynamically populated based on department) -->
+        <label for="doctor">Doctor:</label>
+        <select
+          id="doctor"
+          formControlName="doctorId"
+          (change)="onDoctorChange($event)"
+        >
+          <option value="" disabled>Select Doctor</option>
+          <!-- Loop through doctors and display options -->
+          <option *ngFor="let doctor of doctors" [value]="doctor.id">
+            {{ doctor.doctorName }}
+          </option>
+        </select>
+        <div
+          *ngIf="
+            appointmentForm.get('doctorId')?.invalid &&
+            appointmentForm.get('doctorId')?.touched
+          "
+          class="error"
+        >
+          Doctor is required.
+        </div>
+
+        <!-- Medical Day Selection -->
+        <label for="medicalDay">Medical Day:</label>
+        <input
+          type="date"
+          id="medicalDay"
+          formControlName="medicalDay"
+          (change)="onMedicalDayChange($event)"
+        />
+        <div
+          *ngIf="
+            appointmentForm.get('medicalDay')?.invalid &&
+            appointmentForm.get('medicalDay')?.touched
+          "
+          class="error"
+        >
+          Medical Day is required.
+        </div>
+
+        <label *ngIf="appointmentForm.get('medicalDay')?.value">Slot:</label>
+        <div
+          class="slot-options"
+          *ngIf="
+            appointmentForm.get('medicalDay')?.value &&
+            appointmentForm.get('doctorId')?.value
+          "
+        >
+          <div
+            *ngFor="let slot of slotOptions"
+            (click)="onSlotChange(slot.value)"
+            [ngClass]="{
+              selected: selectedSlot === slot.value,
+              disabled: lockedSlots.includes(slot.value)
+            }"
+            [style.pointer-events]="
+              lockedSlots.includes(slot.value) ? 'none' : 'auto'
+            "
+          >
+            {{ slot.label }}
+          </div>
+        </div>
+
+        <div
+          *ngIf="
+            appointmentForm.get('slot')?.invalid &&
+            appointmentForm.get('slot')?.touched
+          "
+          class="error"
+        >
+          Slot is required.
+        </div>
+      </fieldset>
+
+      <!-- Next Button -->
+      <button
+        type="button"
+        (click)="goToStep(2)"
+        [disabled]="
+          appointmentForm.get('departmentId')?.invalid ||
+          appointmentForm.get('doctorId')?.invalid ||
+          appointmentForm.get('medicalDay')?.invalid ||
+          appointmentForm.get('slot')?.invalid
+        "
+      >
+        Next
+      </button>
+    </div>
+
+    <!-- Step 2: Enter Personal Information -->
+    <div *ngIf="currentStep === 2">
+      <fieldset>
+        <legend>Step 2: Enter Personal Information</legend>
+
+        <label for="name">Name:</label>
+        <input
+          type="text"
+          id="name"
+          formControlName="patientName"
+          placeholder="Your Full Name"
+        />
+        <div
+          *ngIf="
+            appointmentForm.get('name')?.invalid &&
+            appointmentForm.get('name')?.touched
+          "
+          class="error"
+        >
+          Name must be at least 3 characters long.
+        </div>
+
+        <label for="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="patientEmail"
+          placeholder="Your Email"
+        />
+        <div
+          *ngIf="
+            appointmentForm.get('email')?.invalid &&
+            appointmentForm.get('email')?.touched
+          "
+          class="error"
+        >
+          Please enter a valid email.
+        </div>
+
+        <label for="phone">Phone Number:</label>
+        <input
+          type="tel"
+          id="phone"
+          formControlName="patientPhone"
+          placeholder="Your Phone Number"
+        />
+        <div
+          *ngIf="
+            appointmentForm.get('phone')?.invalid &&
+            appointmentForm.get('phone')?.touched
+          "
+          class="error"
+        >
+          Phone number must be 10 digits.
+        </div>
+      </fieldset>
+
+      <!-- Navigation Buttons -->
+      <button type="button" (click)="goToStep(1)">Back</button>
+      <button
+        type="button"
+        (click)="goToStep(3)"
+        [disabled]="
+          appointmentForm.get('patientName')?.invalid ||
+          appointmentForm.get('patientEmail')?.invalid ||
+          appointmentForm.get('patientPhone')?.invalid
+        "
+      >
+        Next
+      </button>
+    </div>
+
+    <!-- Step 3: Complete Payment -->
+    <div *ngIf="currentStep === 3">
+      <fieldset>
+        <legend>Step 3: Complete Payment</legend>
+        <app-payment
+          [doctorPrice]="appointmentForm.get('paymentAmount')?.value || 0"
+          (paymentCompleted)="onPaymentCompleted($event)"
+        >
+        </app-payment>
+      </fieldset>
+
+      <!-- Navigation Buttons -->
+      <button type="button" (click)="goToStep(2)">Back</button>
+      <button type="button" (click)="checkFormValidity()">
+        Submit Appointment
+      </button>
+    </div>
+  </form>
+</div>
+

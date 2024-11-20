@@ -1,0 +1,46 @@
+.notification-container {
+  position: relative;
+}
+
+.notification-popup {
+  position: absolute;
+  top: 50px; /* Điều chỉnh vị trí của popup */
+  right: 0;
+  width: 300px;
+  padding: 10px;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f8f8f8;
+  padding: 5px;
+  border-bottom: 1px solid #ddd;
+}
+
+.notification-list {
+  list-style: none;
+  padding: 0;
+}
+
+.notification-list li {
+  padding: 5px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #888;
+}
+
+.close-btn:hover {
+  color: #000;
+}

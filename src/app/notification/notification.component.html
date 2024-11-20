@@ -1,0 +1,18 @@
+<div class="notification-container">
+  <!-- Icon tin nhắn trên thanh điều hướng -->
+  <a class="nav-link" (click)="togglePopup()">
+    <span class="mai-mail text-primary"></span>
+    <span *ngIf="messages.length > 0" class="badge badge-danger">{{ messages.length }}</span>
+  </a>
+
+  <!-- Popup thông báo -->
+  <div *ngIf="isPopupVisible" class="notification-popup">
+    <div class="popup-header">
+      <h5>Notification</h5>
+      <button (click)="closePopup()" class="close-btn">X</button>
+    </div>
+    <ul class="notification-list">
+      <li *ngFor="let message of messages">{{ message }}</li>
+    </ul>
+  </div>
+</div>
