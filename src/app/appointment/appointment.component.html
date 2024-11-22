@@ -1,9 +1,7 @@
 <div class="back-to-top"></div>
 
-
-
 <div class="form-basin">
-  <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="appointmentForm">
     <!-- Step 1: Select Appointment Details -->
     <div *ngIf="currentStep === 1">
       <fieldset>
@@ -201,19 +199,14 @@
     <div *ngIf="currentStep === 3">
       <fieldset>
         <legend>Step 3: Complete Payment</legend>
-        <app-payment
-          [doctorPrice]="appointmentForm.get('paymentAmount')?.value || 0"
-          (paymentCompleted)="onPaymentCompleted($event)"
-        >
-        </app-payment>
-      </fieldset>
+        <!-- Nút Submit để gửi form và tạo order -->
+        <button (click)="onSubmit()">Submit Order</button>
+        <app-payment></app-payment>
 
+      </fieldset>
       <!-- Navigation Buttons -->
       <button type="button" (click)="goToStep(2)">Back</button>
-      <button type="button" (click)="checkFormValidity()">
-        Submit Appointment
-      </button>
+
     </div>
   </form>
 </div>
-

@@ -17,7 +17,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { PaymentComponent } from './payment/payment.component';
 import { PayPalService } from './paypal.service';
 import { NotificationComponent } from './notification/notification.component';
-import { WebsocketService } from './websocket.service';  // Đảm bảo đã import WebSocketService
+import { WebsocketService } from './websocket.service';
+import { VnPayPaymentComponent } from './vn-pay-payment/vn-pay-payment.component';  // Đảm bảo đã import WebSocketService
 
 @NgModule({
   declarations: [		
@@ -33,7 +34,8 @@ import { WebsocketService } from './websocket.service';  // Đảm bảo đã im
     PaymentComponent,
     NotificationComponent,
       HeaderComponent,
-      FooterComponent
+      FooterComponent,
+      VnPayPaymentComponent
    ],
   imports: [
     BrowserModule,

@@ -1,8 +1,9 @@
-import { Component, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AppointmentService } from '../appointment.service';
 import { RandomCodeService } from '../random-code.service'; // Import RandomCodeService
 import { HttpErrorResponse } from '@angular/common/http';
+import { PaymentComponent } from '../payment/payment.component'; // Import component con
 
 @Component({
   selector: 'app-appointment',
@@ -10,20 +11,25 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./appointment.component.css'],
 })
 export class AppointmentComponent implements OnInit {
-  randomCode: string | null = null; // Biến để lưu trữ mã ngẫu nhiên
-
+  @ViewChild(PaymentComponent) paymentComponent!: PaymentComponent; // Truyền component con vào đây
+  approvalLink: string = ''; // Dùng để lưu approvalLink từ server
+  randomCode: string | null = null;
   currentStep: number = 1;
   slotOptions: any[] = [];
-  allSlots: any[] = []; // Mảng lưu tất cả các slot từ API
-  selectedSlot: any; // Mảng chứa danh sách khoa bệnh
-  departments: any[] = []; // Mảng chứa danh sách bác sĩ
+  allSlots: any[] = [];
+  selectedSlot: any;
+  departments: any[] = [];
   doctors: any[] = [];
-  paymentSuccessful: boolean = false; // Kiểm tra trạng thái thanh toán
-
-  // Mảng chứa các slot đã được đặt (dạng chuỗi như '08:00 - 09:00')
+  paymentSuccessful: boolean = false;
   bookedSlots: string[] = [];
-
-  // Form initialization using FormGroup and FormControl
+  ngAfterViewInit(): void {
+    // Chắc chắn là paymentComponent đã sẵn sàng
+    if (this.paymentComponent) {
+      console.log('paymentComponent đã sẵn sàng:', this.paymentComponent);
+      // Bây giờ bạn có thể gọi phương thức của component con
+      this.paymentComponent.setupPayPalButton();
+    }
+  }
   appointmentForm = new FormGroup({
     departmentId: new FormControl<number | null>(null, Validators.required),
     doctorId: new FormControl<number | null>(null, Validators.required),
@@ -42,20 +48,7 @@ export class AppointmentComponent implements OnInit {
       Validators.pattern(/^\d{10}$/),
     ]),
     paymentAmount: new FormControl<number | null>(null, Validators.required),
-    paymentEncryption: new FormControl<string | null>(null),
-    // Các trường thanh toán mới
-    orderID: new FormControl<string | null>(null, Validators.required),
-    payerID: new FormControl<string | null>(null, Validators.required),
-    paymentID: new FormControl<string | null>(null, Validators.required),
-    paymentSource: new FormControl<string | null>(
-      'paypal',
-      Validators.required
-    ), // Giá trị mặc định 'paypal'
-    facilitatorAccessToken: new FormControl<string | null>(
-      null,
-      Validators.required
-    ),
-      randomCode: new FormControl<string | null>(null, Validators.required),
+    randomCode: new FormControl<string | null>(null, Validators.required),
   });
 
   // Inject AppointmentService and RandomCodeService
@@ -63,27 +56,14 @@ export class AppointmentComponent implements OnInit {
     private appointmentService: AppointmentService,
     private randomCodeService: RandomCodeService // Tiêm RandomCodeService vào constructor
   ) {}
-  onPaymentCompleted(paymentInfo: { paymentStatus: boolean; data: any }): void {
-    this.paymentSuccessful = paymentInfo.paymentStatus; // Lấy trạng thái thanh toán từ paymentStatus
-    console.log('Trạng thái thanh toán:', this.paymentSuccessful);
-    this.appointmentForm.get('orderID')?.setValue(paymentInfo.data.orderID);
-    this.appointmentForm.get('payerID')?.setValue(paymentInfo.data.payerID);
-    this.appointmentForm.get('paymentID')?.setValue(paymentInfo.data.paymentID);
-    this.appointmentForm.get('paymentSource')?.setValue(paymentInfo.data.paymentSource);
-    this.appointmentForm.get('facilitatorAccessToken')?.setValue(paymentInfo.data.facilitatorAccessToken);
-    this.appointmentForm.get('paymentAmount')?.setValue(paymentInfo.data.amount);
-    if (
-      this.currentStep === 3 &&
-      this.appointmentForm.valid &&
-      this.paymentSuccessful
-    ) {
-      console.log('Thanh toán thành công!');
-      console.log('gọi hàm submit');
-      this.onSubmit(); // Gọi hàm submit sau khi đã gán giá trị vào form
-    } else {
-      console.log('Thanh toán thất bại.');
-      // Thực hiện các hành động khi thanh toán thất bại
-    }
+
+  createOrder(): void {
+    console.log("gọi đến component cha")
+      if(this.currentStep==3 &&
+        this.appointmentForm.valid
+      ){
+        this.onSubmit();
+      }
   }
 
   ngOnInit(): void {
@@ -266,6 +246,14 @@ export class AppointmentComponent implements OnInit {
       this.appointmentService.registerAppointment(appointmentData).subscribe({
         next: (response) => {
           console.log('Appointment registered successfully:', response);
+          this.approvalLink = response.approvalLink; // Lưu approvalLink từ phản hồi server
+          console.log("link là: " + this.approvalLink)
+          // Sau khi có approvalLink, gọi ngay hàm setupPayPalButton của component con
+          if(this.approvalLink!=null){
+            this.paymentComponent.approvalLink = this.approvalLink; // Truyền trực tiếp vào @Input()
+            this.paymentComponent.setupPayPalButton(); // Gọi phương thức trong component con
+          }
+
         },
         error: (error) => {
           console.error('Error occurred while submitting appointment:', error);
