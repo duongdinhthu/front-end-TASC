@@ -13,7 +13,7 @@ export class AppointmentService {
   private doctorsApiUrl = 'http://localhost:8080/api/userservice/notjwt/doctors/getbydepartment'; // URL của API bác sĩ
   private checkSlotAppointmentByDoctor = "http://localhost:8080/api/appointments/checkslot";
   private lockSlot = "http://localhost:8082/api/appointments/lock";
-  private apiRegisterAPM = "http://localhost:8082/api/appointments/register";
+  private apiRegisterAPM = "http://localhost:8080/api/appointments/register";
 
   constructor(private http: HttpClient) {}
 

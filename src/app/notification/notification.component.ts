@@ -8,35 +8,34 @@ import { RandomCodeService } from '../random-code.service'; // Đảm bảo đú
   styleUrls: ['./notification.component.css']
 })
 export class NotificationComponent implements OnInit, OnDestroy {
-  randomCode: string | null = null;
-  messages: string[] = [];  // Mảng chứa các thông báo
-  isPopupVisible: boolean = false; // Biến điều khiển hiển thị popup thông báo
+  randomCode: string | null = null; // Mã xác định phiên WebSocket
+  messages: string[] = []; // Mảng chứa các thông báo từ server
+  isPopupVisible: boolean = false; // Biến kiểm soát hiển thị popup thông báo
 
   constructor(
-    private websocketService: WebsocketService,
-    private randomCodeService: RandomCodeService // Inject RandomCodeService
+    private websocketService: WebsocketService, // Service quản lý WebSocket
+    private randomCodeService: RandomCodeService // Service tạo randomCode
   ) {}
 
   ngOnInit(): void {
-    // Lấy randomCode từ RandomCodeService
+    // Lấy mã randomCode từ RandomCodeService
     this.randomCode = this.randomCodeService.getRandomCode();
 
-    // Nếu không có mã trong sessionStorage, tạo mã mới
+    // Nếu chưa có mã, tạo mới và lưu vào sessionStorage
     if (!this.randomCode) {
       this.randomCode = this.randomCodeService.createRandomCode();
-      sessionStorage.setItem('randomCode', this.randomCode);  // Lưu vào sessionStorage
+      sessionStorage.setItem('randomCode', this.randomCode);
     }
 
-    // Kiểm tra xem đã có kết nối WebSocket chưa
+    // Kết nối WebSocket nếu chưa kết nối
     if (this.randomCode && !this.websocketService.isConnected()) {
-      // Kết nối WebSocket với randomCode nếu chưa có kết nối
       this.websocketService.connect(this.randomCode);
     }
 
-    // Lắng nghe thông điệp từ WebSocket
+    // Lắng nghe thông báo từ server qua WebSocket
     this.websocketService.getMessages().subscribe((message) => {
-      this.messages.push(message);  // Thêm thông báo vào mảng
-      console.log("Received message:", message);
+      this.messages.push(message); // Lưu tin nhắn vào mảng
+      console.log("Received message:", message); // In tin nhắn ra console
     });
   }
 
@@ -45,7 +44,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     this.websocketService.closeConnection();
   }
 
-  // Hàm bật/tắt popup
+  // Hàm bật/tắt hiển thị popup
   togglePopup(): void {
     this.isPopupVisible = !this.isPopupVisible;
   }
